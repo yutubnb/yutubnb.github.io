@@ -204,7 +204,7 @@
         }
 
         .modal.active {
-            display: block; /* ИЗМЕНЕНО: убрано display: flex */
+            display: block;
         }
 
         .modal-content {
@@ -214,13 +214,13 @@
             max-width: 700px;
             max-height: 80vh;
             overflow-y: auto;
-            position: absolute; /* ИЗМЕНЕНО */
-            top: 50%; /* ИЗМЕНЕНО */
-            left: 50%; /* ИЗМЕНЕНО */
-            transform: translate(-50%, -50%); /* ИЗМЕНЕНО */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             animation: slideIn 0.3s ease;
             border: 1px solid #d4af37;
-            width: calc(100% - 40px); /* для мобильных */
+            width: calc(100% - 40px);
             box-sizing: border-box;
         }
 
@@ -259,6 +259,23 @@
         .close-btn:hover {
             background: #f0c854;
             transform: translateX(-50%) translateY(-2px);
+        }
+
+        /* АНИМАЦИЯ ЦВЕТКА */
+        @keyframes sway {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25%  { transform: translateY(-8px) rotate(-1.5deg); }
+            75%  { transform: translateY(-8px) rotate(1.5deg); }
+        }
+
+        .osmanthus-flower {
+            animation: sway 8s ease-in-out infinite;
+            will-change: transform;
+            margin: 20px auto;
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
         }
 
         @keyframes fadeIn {
@@ -386,9 +403,9 @@
         <div class="content-section">
             <div class="section-title">Osmanthus and Renewal</div>
 
-          <img src="thumbs/cvetok.png" style="width: 400px; height: auto; margin: 20px 0;">
+            <!-- АНИМИРОВАННОЕ ИЗОБРАЖЕНИЕ -->
+            <img src="thumbs/cvetok.png" class="osmanthus-flower">
 
-			
             <div class="section-text">
                 In the legends, beside Yùtù grows the osmanthus tree (桂花). Its blossoms return again and again, filling the air with fragrance. It is another symbol of cycles: blooming, fading, blooming again.
             </div>
@@ -450,7 +467,7 @@
     </div>
 
     <script>
-        // Modal functions — УПРОЩЕНЫ, т.к. центрирование теперь через CSS
+        // Modal functions
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
         }
