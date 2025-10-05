@@ -198,7 +198,7 @@
             left: 0;
             top: 0;
             width: 100%;
-            height: 100%;
+            height: 100vh; /* ИЗМЕНЕНО: 100% → 100vh для стабильности на мобильных */
             background-color: rgba(0, 0, 0, 0.8);
             animation: fadeIn 0.3s ease;
         }
@@ -447,19 +447,36 @@
     </div>
 
     <script>
-        // Modal functions
+        // Modal functions — ИСПРАВЛЕНО ДЛЯ МОБИЛЬНЫХ
         function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
+            const modal = document.getElementById(modalId);
+            // Устанавливаем высоту вручную для корректного центрирования на мобильных
+            modal.style.height = window.innerHeight + 'px';
+            modal.classList.add('active');
+            
+            // Обработчик изменения размера (поворот экрана и т.п.)
+            const handleResize = () => {
+                if (modal.classList.contains('active')) {
+                    modal.style.height = window.innerHeight + 'px';
+                }
+            };
+            window.addEventListener('resize', handleResize);
+            modal._resizeHandler = handleResize;
         }
 
         function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            if (modal._resizeHandler) {
+                window.removeEventListener('resize', modal._resizeHandler);
+                modal._resizeHandler = null;
+            }
         }
 
         // Close modal when clicking outside
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
+                closeModal(event.target.id);
             }
         }
 
