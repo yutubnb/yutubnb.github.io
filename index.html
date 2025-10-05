@@ -198,15 +198,13 @@
             left: 0;
             top: 0;
             width: 100%;
-            height: 100vh; /* ИЗМЕНЕНО: 100% → 100vh для стабильности на мобильных */
+            height: 100vh;
             background-color: rgba(0, 0, 0, 0.8);
             animation: fadeIn 0.3s ease;
         }
 
         .modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block; /* ИЗМЕНЕНО: убрано display: flex */
         }
 
         .modal-content {
@@ -216,9 +214,14 @@
             max-width: 700px;
             max-height: 80vh;
             overflow-y: auto;
-            position: relative;
+            position: absolute; /* ИЗМЕНЕНО */
+            top: 50%; /* ИЗМЕНЕНО */
+            left: 50%; /* ИЗМЕНЕНО */
+            transform: translate(-50%, -50%); /* ИЗМЕНЕНО */
             animation: slideIn 0.3s ease;
             border: 1px solid #d4af37;
+            width: calc(100% - 40px); /* для мобильных */
+            box-sizing: border-box;
         }
 
         .modal-content h2 {
@@ -264,8 +267,8 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from { transform: translate(-50%, -50%) translateY(-50px); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
         }
 
         @media (max-width: 768px) {
@@ -447,36 +450,19 @@
     </div>
 
     <script>
-        // Modal functions — ИСПРАВЛЕНО ДЛЯ МОБИЛЬНЫХ
+        // Modal functions — УПРОЩЕНЫ, т.к. центрирование теперь через CSS
         function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            // Устанавливаем высоту вручную для корректного центрирования на мобильных
-            modal.style.height = window.innerHeight + 'px';
-            modal.classList.add('active');
-            
-            // Обработчик изменения размера (поворот экрана и т.п.)
-            const handleResize = () => {
-                if (modal.classList.contains('active')) {
-                    modal.style.height = window.innerHeight + 'px';
-                }
-            };
-            window.addEventListener('resize', handleResize);
-            modal._resizeHandler = handleResize;
+            document.getElementById(modalId).classList.add('active');
         }
 
         function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('active');
-            if (modal._resizeHandler) {
-                window.removeEventListener('resize', modal._resizeHandler);
-                modal._resizeHandler = null;
-            }
+            document.getElementById(modalId).classList.remove('active');
         }
 
         // Close modal when clicking outside
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
-                closeModal(event.target.id);
+                event.target.classList.remove('active');
             }
         }
 
